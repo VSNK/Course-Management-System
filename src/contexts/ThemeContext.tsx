@@ -1,19 +1,44 @@
-import React, {createContext, FC, useContext, useState} from 'react';
+import React, {
+  createContext,
+  FC,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from 'react';
 import {StyleSheet} from 'react-native';
 
 type ColorType = {
   primary: string;
   secondary: string;
+  success: string;
+  info: string;
+  warning: string;
+  danger: string;
+  light: string;
+  dark: string;
 };
 
 const lightColors: ColorType = {
-  primary: '#327de6',
-  secondary: '#789',
+  primary: '#0d6efd',
+  secondary: '#6c757d',
+  success: '#198754',
+  info: '#0dcaf0',
+  warning: '#ffc107',
+  danger: '#dc3545',
+  light: '#f8f9fa',
+  dark: '#212529',
 };
 
 const darkColors: ColorType = {
-  primary: 'purple',
-  secondary: '#345',
+  primary: '#0d6efd',
+  secondary: '#6c757d',
+  success: '#198754',
+  info: '#0dcaf0',
+  warning: '#ffc107',
+  danger: '#dc3545',
+  light: '#f8f9fa',
+  dark: '#212529',
 };
 
 type FontType = {
@@ -104,7 +129,7 @@ export const createStyleSheet = (styleSheet: any, theme: any) => {
 
 type ThemeContextType = {
   theme: ThemeType;
-  switchThemeTo: React.Dispatch<React.SetStateAction<'light' | 'dark'>>;
+  switchThemeTo: Dispatch<SetStateAction<'light' | 'dark'>>;
 };
 
 const ThemeContext = createContext<ThemeContextType>({

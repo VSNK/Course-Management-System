@@ -4,22 +4,22 @@ import TabScreenHeader from '../components/TabScreenHeader';
 import Paragraph from '../components/typography/Paragraph';
 import {useThemeContext} from '../contexts/ThemeContext';
 
-const Home: FC<any> = ({route}) => {
+const Tests: FC<any> = ({route}) => {
   const {colors, styles} = useThemeContext(viewStyles);
   const {name: courseName = 'Sample'} = route.params;
 
   return (
     <SafeAreaView>
       <StatusBar backgroundColor={colors.primary} />
-      <TabScreenHeader title="Home" />
+      <TabScreenHeader title="Tests" />
       <View style={styles.mainView}>
-        <Paragraph.Bold>{courseName}</Paragraph.Bold>
+        <Paragraph.Bold>{courseName} Tests</Paragraph.Bold>
       </View>
     </SafeAreaView>
   );
 };
 
-export default Home;
+export default Tests;
 
 const viewStyles = {
   mainView: {

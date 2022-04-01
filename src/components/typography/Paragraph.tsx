@@ -37,18 +37,17 @@ const Light: FC<ParagraphProps> = ({size, style, children}) => {
   return <Text style={[defaultStyle, style]}>{children}</Text>;
 };
 
-const Thin: FC<ParagraphProps> = ({size, style, children}) => {
-  const {fonts} = useThemeContext();
-  const defaultStyle = {fontSize: size ?? 32, fontFamily: fonts.paragraphThin};
-  return <Text style={[defaultStyle, style]}>{children}</Text>;
-};
+// const Thin: FC<ParagraphProps> = ({size, style, children}) => {
+//   const {fonts} = useThemeContext();
+//   const defaultStyle = {fontSize: size ?? 32, fontFamily: fonts.paragraphThin};
+//   return <Text style={[defaultStyle, style]}>{children}</Text>;
+// };
 
 const Paragraph = {
   Bold,
   SemiBold,
   Medium,
   Light,
-  Thin,
 };
 
 export default Paragraph;

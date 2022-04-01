@@ -1,18 +1,14 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  Text,
-  Pressable,
-} from 'react-native';
+import {SafeAreaView, StatusBar, ScrollView, Pressable} from 'react-native';
+import Heading from '../../components/typography/Heading';
 import {useAuthContext} from '../../contexts/AuthContext';
 import {useThemeContext} from '../../contexts/ThemeContext';
 
 export default function SignIn() {
   const {signIn} = useAuthContext();
   const {styles} = useThemeContext({
-    mainView: {backgroundColor: 'primary', color: 'secondary', height: '100%'},
+    mainView: {backgroundColor: 'light', color: 'success', height: '100%'},
+    headingStyle: {color: 'success'},
   });
 
   return (
@@ -20,7 +16,7 @@ export default function SignIn() {
       <StatusBar />
       <ScrollView style={{}}>
         <Pressable onPress={signIn}>
-          <Text>Sign In</Text>
+          <Heading.Medium style={styles.headingStyle}>Sign In</Heading.Medium>
         </Pressable>
       </ScrollView>
     </SafeAreaView>

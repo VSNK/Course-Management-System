@@ -9,14 +9,14 @@ type HeadingProps = {
 
 const Bold: FC<HeadingProps> = ({size, style, children}) => {
   const {fonts} = useThemeContext();
-  const defaultStyle = {fontSize: size ?? 32, fontFamily: fonts.headingBold};
+  const defaultStyle = {fontSize: size ?? 40, fontFamily: fonts.headingBold};
   return <Text style={[defaultStyle, style]}>{children}</Text>;
 };
 
 const SemiBold: FC<HeadingProps> = ({size, style, children}) => {
   const {fonts} = useThemeContext();
   const defaultStyle = {
-    fontSize: size ?? 32,
+    fontSize: size ?? 40,
     fontFamily: fonts.headingSemiBold,
   };
   return <Text style={[defaultStyle, style]}>{children}</Text>;
@@ -24,28 +24,27 @@ const SemiBold: FC<HeadingProps> = ({size, style, children}) => {
 
 const Medium: FC<HeadingProps> = ({size, style, children}) => {
   const {fonts} = useThemeContext();
-  const defaultStyle = {fontSize: size ?? 32, fontFamily: fonts.headingMedium};
+  const defaultStyle = {fontSize: size ?? 40, fontFamily: fonts.headingMedium};
   return <Text style={[defaultStyle, style]}>{children}</Text>;
 };
 
 const Light: FC<HeadingProps> = ({size, style, children}) => {
   const {fonts} = useThemeContext();
-  const defaultStyle = {fontSize: size ?? 32, fontFamily: fonts.headingLight};
+  const defaultStyle = {fontSize: size ?? 40, fontFamily: fonts.headingLight};
   return <Text style={[defaultStyle, style]}>{children}</Text>;
 };
 
-const Thin: FC<HeadingProps> = ({size, style, children}) => {
-  const {fonts} = useThemeContext();
-  const defaultStyle = {fontSize: size ?? 32, fontFamily: fonts.headingThin};
-  return <Text style={[defaultStyle, style]}>{children}</Text>;
-};
+// const Thin: FC<HeadingProps> = ({size, style, children}) => {
+//   const {fonts} = useThemeContext();
+//   const defaultStyle = {fontSize: size ?? 40, fontFamily: fonts.headingThin};
+//   return <Text style={[defaultStyle, style]}>{children}</Text>;
+// };
 
 const Heading = {
   Bold,
   SemiBold,
   Medium,
   Light,
-  Thin,
 };
 
 export default Heading;
