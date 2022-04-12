@@ -1,5 +1,5 @@
 import {Link} from '@react-navigation/native';
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StatusBar, View} from 'react-native';
 import FlexButton from '../../components/FlexButton';
 import FormInput from '../../components/FormInput';
@@ -8,35 +8,53 @@ import Paragraph from '../../components/typography/Paragraph';
 import {useAuthContext} from '../../contexts/AuthContext';
 import {useThemeContext} from '../../contexts/ThemeContext';
 
-export default function SignIn() {
-  const {signUp} = useAuthContext();
+export default function Login() {
+  const {signIn} = useAuthContext();
   const {styles} = useThemeContext(viewStyles);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // if (isLoading)
+  //   return (
+  //     <View
+  //       style={{
+  //         height: '100%',
+  //         justifyContent: 'center',
+  //         alignItems: 'center',
+  //       }}>
+  //       <StatusBar />
+  //       <Heading.Medium size={16}>Loading...</Heading.Medium>
+  //     </View>
+  //   );
 
   return (
     <SafeAreaView>
       <StatusBar />
       <View style={styles.mainView}>
         <View style={styles.loginDetailsView}>
-          <Heading.Medium style={styles.headingStyle}>Sign Up</Heading.Medium>
-          <FormInput iconType="person" placeholder="Email" />
+          <Heading.Medium style={styles.headingStyle}>Login</Heading.Medium>
+          <FormInput
+            iconType="person"
+            placeholder="Email"
+            onChangeText={value => setEmail(value)}
+          />
           <FormInput
             iconType="lock"
             secureTextEntry={true}
             placeholder="Password"
-          />
-          <FormInput
-            iconType="lock"
-            secureTextEntry={true}
-            placeholder="Confirm Password"
+            onChangeText={value => setPassword(value)}
           />
         </View>
-
-        <FlexButton onPress={signUp} text="Sign Up" textProps={{size: 16}} />
+        <FlexButton
+          onPress={() => signIn(email, password)}
+          text="Login"
+          textProps={{size: 16}}
+        />
         <View style={styles.loginLinkView}>
-          <Paragraph.Medium size={18}>
-            {'Already a user? '}
-            <Link to={'/Login'} style={styles.loginLink}>
-              Login
+          <Paragraph.Medium size={16}>
+            {'Are you a new user? '}
+            <Link to={'/SignUp'} style={styles.loginLink}>
+              Sign Up
             </Link>
           </Paragraph.Medium>
         </View>
@@ -49,7 +67,7 @@ const viewStyles = {
   mainView: {
     padding: 20,
     backgroundColor: 'light',
-    color: 'success',
+    color: 'primary',
     height: '100%',
   },
   loginDetailsView: {

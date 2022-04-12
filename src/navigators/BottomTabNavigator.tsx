@@ -24,12 +24,12 @@ export default function BottomTabNavigator() {
         initialParams={initialParams}
         options={{tabBarIcon: () => <Icon name="book" size={28} />}}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Tests"
         component={Tests}
         initialParams={initialParams}
         options={{tabBarIcon: () => <Icon name="assignment" size={28} />}}
-      />
+      /> */}
       <Tab.Screen
         name="About"
         component={About}

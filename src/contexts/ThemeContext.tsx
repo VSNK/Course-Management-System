@@ -6,7 +6,7 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleProp, StyleSheet} from 'react-native';
 
 type ColorType = {
   primary: string;
@@ -21,6 +21,39 @@ type ColorType = {
 
 const lightColors: ColorType = {
   primary: '#0d6efd',
+  secondary: '#6c757d',
+  success: '#198754',
+  info: '#0dcaf0',
+  warning: '#ffc107',
+  danger: '#dc3545',
+  light: '#f8f9fa',
+  dark: '#212529',
+};
+
+const greenColors: ColorType = {
+  primary: 'yellowgreen',
+  secondary: '#6c757d',
+  success: '#198754',
+  info: '#0dcaf0',
+  warning: '#ffc107',
+  danger: '#dc3545',
+  light: '#f8f9fa',
+  dark: '#212529',
+};
+
+const yellowColors: ColorType = {
+  primary: 'yellow',
+  secondary: '#6c757d',
+  success: '#198754',
+  info: '#0dcaf0',
+  warning: '#ffc107',
+  danger: '#dc3545',
+  light: '#f8f9fa',
+  dark: '#212529',
+};
+
+const pinkColors: ColorType = {
+  primary: 'pink',
   secondary: '#6c757d',
   success: '#198754',
   info: '#0dcaf0',
@@ -88,6 +121,9 @@ type ThemeType = {
 type ThemesType = {
   light: ThemeType;
   dark: ThemeType;
+  pink: ThemeType;
+  green: ThemeType;
+  yellow: ThemeType;
 };
 
 export const themes: ThemesType = {
@@ -99,9 +135,32 @@ export const themes: ThemesType = {
     colors: darkColors,
     fonts: lightFonts,
   },
+  pink: {
+    colors: pinkColors,
+    fonts: lightFonts,
+  },
+  green: {
+    colors: greenColors,
+    fonts: lightFonts,
+  },
+  yellow: {
+    colors: yellowColors,
+    fonts: lightFonts,
+  },
 };
 
-export const createStyleSheet = (styleSheet: any, theme: any) => {
+type ColorValueType = keyof ColorType;
+type FontFamilyValueType = keyof FontType;
+
+export type StylePropsObject = {
+  [name: string]: {
+    color: ColorValueType;
+    backgroundColor: ColorValueType;
+    fontFamily: FontFamilyValueType;
+  } & StyleProp<any>;
+};
+
+export const createStyleSheet: any = (styleSheet: any, theme: any) => {
   return StyleSheet.create(
     Object.keys(styleSheet).reduce((modStyleSheet: any, styleName: string) => {
       const style = styleSheet[styleName];
@@ -129,7 +188,9 @@ export const createStyleSheet = (styleSheet: any, theme: any) => {
 
 type ThemeContextType = {
   theme: ThemeType;
-  switchThemeTo: Dispatch<SetStateAction<'light' | 'dark'>>;
+  switchThemeTo: Dispatch<
+    SetStateAction<'light' | 'dark' | 'pink' | 'green' | 'yellow'>
+  >;
 };
 
 const ThemeContext = createContext<ThemeContextType>({
@@ -138,7 +199,9 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export const ThemeProvider: FC<any> = ({children}) => {
-  const [themeName, switchThemeTo] = useState<'light' | 'dark'>('light');
+  const [themeName, switchThemeTo] = useState<
+    'light' | 'dark' | 'pink' | 'green' | 'yellow'
+  >('light');
   const theme = themes[themeName];
   const value = {theme, switchThemeTo};
   return (

@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
-import {StyleProp, Text, TextStyle} from 'react-native';
+import {Text, TextProps, TextStyle} from 'react-native';
 import {useThemeContext} from '../../contexts/ThemeContext';
 
-type ParagraphProps = {
+export type ParagraphProps = TextProps & {
   size?: number;
-  style?: StyleProp<TextStyle>;
+  style?: TextStyle;
 };
 
 const Bold: FC<ParagraphProps> = ({size, style, children}) => {
