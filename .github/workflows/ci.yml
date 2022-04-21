@@ -6,14 +6,14 @@ on:
       - master
       - ci/cd
 
-- name: Checkout
-    uses: actions/checkout@v2
-  - uses: actions/setup-node@master
-  - uses: c-hive/gha-yarn-cache@v1
+    - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+      - uses: c-hive/gha-yarn-cache@v1
 
-- name: Install node modules
-    run: |
-      yarn install
+    - name: Install node modules
+        run: |
+          yarn install
 
     - name: Cache Gradle Wrapper
       uses: actions/cache@v2
@@ -28,6 +28,7 @@ on:
         key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-caches-
+  
     - name: Make Gradlew Executable
       run: cd android && chmod +x ./gradlew
 
