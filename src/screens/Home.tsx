@@ -14,11 +14,14 @@ import Heading from '../components/typography/Heading';
 import Paragraph from '../components/typography/Paragraph';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useThemeContext} from '../contexts/ThemeContext';
+import FloatingActionButton from '../components/FloatingActionButton';
+import {useCourseContext} from '../contexts/CourseContext';
 
 const Home: FC<any> = ({route, navigation}) => {
   const {colors, styles} = useThemeContext(viewStyles);
   const {name: courseName = 'Sample'} = route.params;
   const [messages, setMessages] = useState<any>([]);
+  const {courseId} = useCourseContext();
   // const [inputMsg, setInputMsg] = useState('');
 
   // const messages: any = [
@@ -45,10 +48,10 @@ const Home: FC<any> = ({route, navigation}) => {
   useEffect(() => {
     firestore()
       .collection('Messages')
-      .get()
-      .then(docSnapshot => {
+      .where('course', '==', firestore().collection('Courses').doc(courseId))
+      .onSnapshot(docSnapshot => {
         setMessages(
-          docSnapshot.docs.map(doc => {
+          docSnapshot?.docs.map(doc => {
             const {title, message, created_at} = doc.data();
             // console.log('data we got', doc.id, JSON.stringify(fetched));
             const dt = new Date(created_at.seconds * 1000);
@@ -61,9 +64,9 @@ const Home: FC<any> = ({route, navigation}) => {
             };
           }),
         );
-      })
-      .catch(e => console.log('messages fetching:', e));
-  }, []);
+      });
+    // .catch(e => console.log('messages fetching:', e));
+  }, [courseId]);
 
   const iconsTypesToNames: any = useMemo(
     () => ({
@@ -122,9 +125,11 @@ const Home: FC<any> = ({route, navigation}) => {
             keyExtractor={item => item.id}
             renderItem={({item}) => { */}
           {messages.map((item: any) => {
-            const {type, message, title} = item;
+            const {type, message, title, id} = item;
             return (
-              <Pressable style={styles.messageView}>
+              <Pressable
+                onPress={() => navigation.navigate('MessageDetailView', {id})}
+                style={styles.messageView}>
                 <View style={styles.messageSideView}>
                   <View style={styles.messageIconView}>
                     <Icon
@@ -159,11 +164,7 @@ const Home: FC<any> = ({route, navigation}) => {
           {/* /> */}
         </View>
       </ScrollView>
-      <Pressable
-        onPress={onFloatingActionBtnPress}
-        style={styles.floatingActionBtn}>
-        <Icon name="add" size={35} style={styles.floatingActionBtnIcon} />
-      </Pressable>
+      <FloatingActionButton onPress={onFloatingActionBtnPress} />
     </SafeAreaView>
   );
 };

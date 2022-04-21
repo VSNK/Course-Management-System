@@ -5,7 +5,7 @@ import DocumentPicker from 'react-native-document-picker';
 import 'react-native-get-random-values';
 import * as uuid from 'uuid';
 
-export const pickFiles = async () => {
+export const pickFiles = async (allowMultiSelection: boolean = true) => {
   try {
     const permResp = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
@@ -18,7 +18,7 @@ export const pickFiles = async () => {
     ) {
       return null;
     }
-    const resp = await DocumentPicker.pick({allowMultiSelection: true});
+    const resp = await DocumentPicker.pick({allowMultiSelection});
     return resp.map(({name, size, type, uri}) => ({name, size, type, uri}));
   } catch (e) {
     console.log('error while picking', e);

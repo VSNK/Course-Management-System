@@ -24,6 +24,7 @@ const ScreenHeader: FC<ScreenHeaderProps> = ({
     menuIcon: {...viewStyles.menuIcon, color: textColor},
     title: {...viewStyles.title, color: textColor},
   });
+  // console.log('header styles', styles);
 
   return (
     <View style={styles.headerView}>

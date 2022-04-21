@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {useAuthContext} from '../contexts/AuthContext';
+import ContactUs from '../screens/ContactUs';
 import AuthNavigator from './AuthNavigator';
 import DrawerNavigator from './DrawerNavigator';
 
@@ -16,6 +17,7 @@ export default function RootNavigator() {
       ) : (
         <Root.Screen name="Auth" component={AuthNavigator} />
       )}
+      <Root.Screen name="ContactUs" component={ContactUs} />
     </Root.Navigator>
   );
 }

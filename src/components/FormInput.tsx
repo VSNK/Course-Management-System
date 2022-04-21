@@ -28,6 +28,7 @@ const viewStyles = {
     alignItems: 'center',
     marginTop: 15,
     height: 50,
+    backgroundColor: 'white',
   },
   inputIconView: {
     borderWidth: 1,
@@ -36,11 +37,14 @@ const viewStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+    backgroundColor: 'white',
   },
   inputIcon: {
     color: '#ccc',
+    backgroundColor: 'white',
   },
   textInputView: {
+    backgroundColor: 'white',
     flex: 1,
     borderWidth: 1,
     borderColor: '#d9d9d9',

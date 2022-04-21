@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useReducer, useState} from 'react';
+import React, {FC, useCallback, useEffect, useReducer} from 'react';
 import {
   Pressable,
   SafeAreaView,
@@ -11,19 +11,13 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import * as uuid from 'uuid';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import FlexButton from '../components/FlexButton';
 import ScreenHeader from '../components/ScreenHeader';
 import Heading from '../components/typography/Heading';
-import Paragraph from '../components/typography/Paragraph';
 import {useThemeContext} from '../contexts/ThemeContext';
 import {pickFiles, uploadFile} from '../utils/fileUtils';
-
-const iconsTypesToNames: any = {
-  'application/pdf': 'assignment',
-  'image/jpeg': 'image',
-  other: 'description',
-};
+import ResourceListItemView from '../components/ResourceListItemView';
+import {useCourseContext} from '../contexts/CourseContext';
 
 type StateType = {
   docRef: FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData> | null;
@@ -36,7 +30,7 @@ const initialState: StateType = {
   docRef: null,
   title: '',
   message: '',
-  files: [{name: 'hi.pdf', size: 102400, type: 'application/pdf'}],
+  files: [],
 };
 
 type ActionType =
@@ -79,6 +73,7 @@ const AddNewMessage: FC<any> = ({navigation}) => {
   const {styles} = useThemeContext(viewStyles);
   const [state, dispatch] = useReducer(reducer, initialState);
   const {docRef, title, message, files} = state;
+  const {courseId} = useCourseContext();
 
   useEffect(() => {
     if (docRef === null) {
@@ -92,10 +87,12 @@ const AddNewMessage: FC<any> = ({navigation}) => {
     text => dispatch({type: 'SET_TITLE', payload: text}),
     [dispatch],
   );
+
   const onMessageChange = useCallback(
     text => dispatch({type: 'SET_MESSAGE', payload: text}),
     [dispatch],
   );
+
   const onAttachFilesPress = useCallback(async () => {
     const tmpFiles = (await pickFiles()) ?? [];
     console.log('picked files details', JSON.stringify(tmpFiles));
@@ -108,7 +105,7 @@ const AddNewMessage: FC<any> = ({navigation}) => {
       const uploadedFile = await uploadFile(file);
       console.log('uploaded file details', JSON.stringify(uploadedFile));
       const {filename, name, size, type} = uploadedFile ?? {};
-      const ref = resourcesRef.doc(uploadedFile?.uuid);
+      const ref = resourcesRef.doc(uploadedFile?.filename);
       ref.set({
         name,
         filename,
@@ -135,10 +132,12 @@ const AddNewMessage: FC<any> = ({navigation}) => {
 
   const onCreateBtnPress = useCallback(async () => {
     try {
+      const courseRef = firestore().collection('Courses').doc(courseId);
       await docRef?.set(
         {
           title,
           message,
+          course: courseRef,
           created_at: firestore.Timestamp.now(),
         },
         {merge: true},
@@ -148,7 +147,7 @@ const AddNewMessage: FC<any> = ({navigation}) => {
     } catch (e) {
       console.log('error while creating', e);
     }
-  }, [docRef, title, message, navigation]);
+  }, [docRef, title, message, navigation, courseId]);
 
   const onHeaderBackIconPress = useCallback(() => {
     navigation.navigate('Course');
@@ -197,28 +196,7 @@ const AddNewMessage: FC<any> = ({navigation}) => {
           </Heading.SemiBold>
           {files.length > 0 &&
             files.map(({name, type = 'other', size}: any) => (
-              <View style={styles.resourceItemView}>
-                <View style={styles.resourceItemDeleteView}>
-                  <Icon name="close" style={styles.resourceItemDeleteIcon} />
-                </View>
-                <View style={styles.resourceItemIconView}>
-                  <Icon
-                    name={iconsTypesToNames[type]}
-                    size={28}
-                    style={styles.resourceItemIcon}
-                  />
-                </View>
-                <View style={styles.resourceItemTitleView}>
-                  <Heading.Medium size={14} style={styles.resourceItemTitle}>
-                    {name.length >= 25
-                      ? name.slice(0, 25) + '...' + name.slice(name.length - 6)
-                      : name}
-                  </Heading.Medium>
-                  <Paragraph.SemiBold size={12}>
-                    {Math.ceil(size / 1024)} KB
-                  </Paragraph.SemiBold>
-                </View>
-              </View>
+              <ResourceListItemView name={name} type={type} size={size} />
             ))}
         </View>
       </ScrollView>

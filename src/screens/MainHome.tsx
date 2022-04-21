@@ -1,51 +1,60 @@
-import React, {FC, useCallback} from 'react';
-import {
-  SafeAreaView,
-  StatusBar,
-  Pressable,
-  FlatList,
-  ScrollView,
-  View,
-} from 'react-native';
+import React, {FC, useEffect, useState} from 'react';
+import {SafeAreaView, StatusBar, ScrollView, View} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 import Card from '../components/CourseCard';
-import Paragraph from '../components/typography/Paragraph';
-import {useAuthContext} from '../contexts/AuthContext';
 import {useThemeContext} from '../contexts/ThemeContext';
+import TabScreenHeader from '../components/TabScreenHeader';
+import Heading from '../components/typography/Heading';
+import FloatingActionButton from '../components/FloatingActionButton';
+import {useCourseContext} from '../contexts/CourseContext';
+import {useAuthContext} from '../contexts/AuthContext';
 
-const courses = [
-  {
-    id: 1,
-    name: 'HCI',
-  },
-  {
-    id: 2,
-    name: 'SADP',
-  },
-  {
-    id: 3,
-    name: 'OBM',
-  },
-];
-
-const Home: FC<any> = () => {
+const Home: FC<any> = ({navigation}) => {
+  const [courses, setCourses] = useState<any>([]);
   const {colors, styles} = useThemeContext(viewStyles);
-  const {signOut} = useAuthContext();
+  // const {signOut} = useAuthContext();
+  const {role} = useAuthContext();
+  const isTeacher = role === 'teacher';
+  console.log('isTeacher', role);
 
-  const keyExtractor = useCallback(item => item.id, []);
-  const renderItem = useCallback(({item}) => <Card item={item} />, []);
+  useEffect(() => {
+    firestore()
+      .collection('Courses')
+      .onSnapshot(docSnapshot => {
+        setCourses(
+          docSnapshot?.docs.map(doc => {
+            const {name, description, imgUrl, createdBy} = doc.data();
+            // console.log('data we got', doc.id, JSON.stringify(fetched));
+            // const dt = new Date(created_at.seconds * 1000);
+            return {
+              id: doc.id,
+              name,
+              description,
+              imgUrl,
+              createdBy,
+            };
+          }),
+        );
+      });
+    // .catch(e => console.log('messages fetching:', e));
+  }, []);
+
   return (
-    <SafeAreaView style={styles.mainView}>
+    <SafeAreaView>
       <StatusBar backgroundColor={colors.primary} />
-      <View style={{marginTop: 0, paddingTop: 0}}>
-        <Pressable onPress={signOut} style={styles.heading}>
-          <Paragraph.Bold>Courses</Paragraph.Bold>
-        </Pressable>
-        <FlatList
-          data={courses}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-        />
-      </View>
+      <TabScreenHeader title={''} />
+      <ScrollView style={[{marginTop: 0, paddingTop: 0}, styles.mainView]}>
+        <Heading.SemiBold size={26}>Courses</Heading.SemiBold>
+        {courses.map((item: any) => (
+          <Card item={item} />
+        ))}
+        <View style={{marginTop: 50}}></View>
+      </ScrollView>
+      {/* {isTeacher && ( */}
+      <FloatingActionButton
+        onPress={() => navigation.navigate('AddNewCourse')}
+      />
+      {/* )} */}
     </SafeAreaView>
   );
 };
@@ -54,9 +63,8 @@ export default Home;
 
 const viewStyles = {
   mainView: {
-    backgroundColor: 'white',
     color: 'secondary',
-    minHeight: '100%',
+    height: '90%',
     padding: 20,
     paddingTop: 30,
     margin: 0,

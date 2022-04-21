@@ -20,8 +20,8 @@ type ColorType = {
 };
 
 const lightColors: ColorType = {
-  primary: '#0d6efd',
-  secondary: '#6c757d',
+  primary: '#673de6', //'#0d6efd',
+  secondary: '#424C58',
   success: '#198754',
   info: '#0dcaf0',
   warning: '#ffc107',
@@ -212,7 +212,10 @@ export const ThemeProvider: FC<any> = ({children}) => {
 export const useThemeContext = (styles: any = {}) => {
   const {theme, switchThemeTo} = useContext(ThemeContext);
   const {colors, fonts} = theme;
-  const modStyles = createStyleSheet(styles, theme);
+  // console.log('styles', styles);
+  // console.log('theme', theme);
+  const modStyles = createStyleSheet({...styles}, theme);
+  // console.log('modStyles', modStyles);
 
   return {colors, fonts, switchThemeTo, styles: modStyles};
 };

@@ -1,33 +1,70 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {FC, useCallback} from 'react';
-import {Pressable, View} from 'react-native';
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {Image, ImageBackground, Pressable, View} from 'react-native';
 import {useThemeContext} from '../contexts/ThemeContext';
 import Heading from './typography/Heading';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import storage from '@react-native-firebase/storage';
+import Paragraph from './typography/Paragraph';
+import {useCourseContext} from '../contexts/CourseContext';
 
 const Card: FC<any> = ({item}) => {
-  const {styles} = useThemeContext(cardStyles);
+  const {styles, colors} = useThemeContext({...cardStyles});
+  console.log('colors', colors);
+  console.log('styles', styles.headerView.backgroundColor);
   const navigation = useNavigation();
+  const {setCourseId} = useCourseContext();
+  const {name, description, imgUrl} = item;
+  const [imageUrl, setImageUrl] = useState('');
+  // console.log('course card styles', styles);
+
+  useEffect(() => {
+    storage()
+      .refFromURL(imgUrl)
+      .getDownloadURL()
+      .then(url => {
+        setImageUrl(url);
+      })
+      .catch(e => console.log('error while getting download url', e));
+  }, [imgUrl]);
 
   const onPress = useCallback(() => {
+    setCourseId(item.id);
     navigation.navigate('Course', {
       screen: 'Home',
       params: {
         name: item.name,
       },
     });
-  }, [navigation, item.name]);
+  }, [navigation, item.name, item.id, setCourseId]);
 
   return (
     <Pressable onPress={onPress} style={styles.cardView}>
-      <View style={styles.headerView}>
-        <Heading.SemiBold style={styles.courseTitle}>
-          {item.name}
-        </Heading.SemiBold>
+      <View
+        // source={{uri: imageUrl, width: 200}}
+        // resizeMode={'contain'}
+        // imageStyle={{}}
+        style={styles.headerView}>
+        <Heading.SemiBold style={styles.courseTitle}>{name}</Heading.SemiBold>
       </View>
-      <View style={styles.bodyView}></View>
+      <View style={styles.bodyView}>
+        <Paragraph.Medium size={13} style={{width: '65%'}}>
+          {description.length > 120
+            ? description.slice(0, 120) + '...'
+            : description}
+        </Paragraph.Medium>
+      </View>
       <View style={styles.imageView}>
-        <Icon name="person" size={70} style={styles.imageIcon} />
+        {/* <Icon name="person" size={70} style={styles.imageIcon} /> */}
+        <Image
+          source={{
+            uri: imageUrl,
+            width: 100,
+            height: 100,
+          }}
+          // resizeMode="contain"
+          style={styles.imageIcon}
+        />
       </View>
     </Pressable>
   );
@@ -65,6 +102,7 @@ const cardStyles = {
     borderTopWidth: 0,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+    padding: 10,
   },
   imageView: {
     position: 'absolute',
@@ -78,7 +116,7 @@ const cardStyles = {
     justifyContent: 'center',
     padding: 0,
   },
-  imageIcon: {},
+  imageIcon: {borderRadius: 12},
 };
 
 export default Card;
