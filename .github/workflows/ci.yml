@@ -1,23 +1,14 @@
-name: Continuous Integration
+name: Github Actions
 
-on:
-  push:
-    branches:
-      - master
-      - ci/cd
-stages:
-  - build
----
-build:android:package:
-  stage: build
-  image: reactnativecommunity/react-native-android
-  script:
-    - echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
-    - yarn install
-    - base64 -d $ANDROID_KEYSTORE > android/app/my-key.keystore
-    - yarn generate-gradle-properties
-    - yarn bundle
-    - yarn android-package --no-daemon
-  artifacts:
-    paths:
-      - ./android/app/build/outputs/
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: reactnativecommunity/react-native-android
+    steps:
+    - uses: actions/checkout@v2
+    - name: Envinfo
+      run: npx envinfo
+    - name: Build application
+      run: yarn install && cd android && chmod +x gradlew && ./gradlew assembleRelease
