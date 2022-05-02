@@ -14,7 +14,7 @@ const iconsTypesToNames: any = {
   'file/other': 'description',
 };
 
-type ResourceListItemViewProps = {
+type ThumbnailViewProps = {
   name: string;
   filename: string;
   type: string;
@@ -23,7 +23,7 @@ type ResourceListItemViewProps = {
   showRemoveIcon?: boolean;
 };
 
-const ResourceListItemView: FC<ResourceListItemViewProps> = ({
+const ThumbnailView: FC<ThumbnailViewProps> = ({
   name,
   type = 'other',
   size,
@@ -57,96 +57,77 @@ const ResourceListItemView: FC<ResourceListItemViewProps> = ({
           <Icon name="close" style={styles.resourceItemDeleteIcon} />
         </View>
       )}
-      <View style={styles.resourceItemIconVi}>
+      <View style={styles.resourceItemIconView}>
         <Icon
           name={iconsTypesToNames[type]}
           size={28}
           style={styles.resourceItemIcon}
         />
       </View>
-      <View style={styles.resourceItemTitleView}>
-        <Heading.Medium size={14} style={styles.resourceItemTitle}>
-          {name.length >= 25
-            ? name.slice(0, 25) + '...' + name.slice(name.length - 6)
-            : name}
-        </Heading.Medium>
-        <Paragraph.SemiBold size={12}>
-          {Math.ceil(size / 1024)} KB
-        </Paragraph.SemiBold>
-      </View>
-      <View style={styles.progressContainer}>
-        {isPending && (
-          <Icon name="file-download" onPress={() => makeOffline()} size={30} />
-        )}
-        {isDownloaded && (
-          <Icon name="cancel" onPress={() => removeFile()} size={30} />
-        )}
-        {isDownloading && (
-          <Progress.Circle size={30} progress={progress / 100} />
-        )}
+      <View style={styles.resourceTitleContainer}>
+        <View style={styles.resourceItemTitleView}>
+          <Heading.Medium size={12} style={styles.resourceItemTitle}>
+            {name.length >= 25
+              ? name.slice(0, 25) + '...' + name.slice(name.length - 6)
+              : name}
+          </Heading.Medium>
+          <Paragraph.SemiBold size={12}>
+            {Math.ceil(size / 1024)} KB
+          </Paragraph.SemiBold>
+        </View>
+        <View style={styles.progressContainer}>
+          {isPending && (
+            <Icon
+              name="file-download"
+              onPress={() => makeOffline()}
+              size={30}
+            />
+          )}
+          {isDownloaded && (
+            <Icon name="cancel" onPress={() => removeFile()} size={30} />
+          )}
+          {isDownloading && (
+            <Progress.Circle size={30} progress={progress / 100} />
+          )}
+        </View>
       </View>
     </Pressable>
   );
 };
 
-export default ResourceListItemView;
+export default ThumbnailView;
 
 const viewStyles = {
-  mainView: {
-    minHeight: '100%',
-  },
-  scrollView: {
-    flex: 1,
-    padding: 16,
-    // marginBottom: 100,
-  },
-  inputView: {
-    marginBottom: 20,
-  },
-  inputTitle: {
-    marginBottom: 5,
-  },
-  textArea: {
-    paddingVertical: 10,
-    textAlignVertical: 'top',
-  },
-  textInput: {
-    borderWidth: 2,
-    borderColor: '#d9d9d9',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  attachFilesBtn: {
-    width: '100%',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    backgroundColor: '#d9d9d9',
-    marginBottom: 20,
-  },
   resourceItemView: {
-    flexDirection: 'row',
-    padding: 10,
+    // flexDirection: 'row',
+    // padding: 10,
     borderRadius: 5,
     borderWidth: 2,
     borderColor: '#d9d9d9',
     marginBottom: 10,
+    width: 250,
+    // height: 170,
+    marginRight: 10,
   },
   resourceListView: {marginBottom: 50},
   resourceItemIconView: {
     // backgroundColor: 'yellow',
-    width: 35,
-    height: 35,
+    width: '100%',
+    height: 150,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
+    backgroundColor: '#d9d9d9',
   },
   resourceItemTitleView: {
     paddingLeft: 10,
     paddingRight: 10,
     // backgroundColor: 'blue',
     flex: 1,
+  },
+  resourceTitleContainer: {
+    flexDirection: 'row',
+    padding: 5,
   },
   resourceItemTitle: {},
   resourceItemDeleteView: {
@@ -167,5 +148,11 @@ const viewStyles = {
   progressContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 10,
+    // position: 'absolute',
+    // height: '100%',
+    // width: '100%',
+    // zIndex: 1,
+    // backgroundColor: 'rgba(0,0,0,0.4)',
   },
 };

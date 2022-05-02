@@ -45,11 +45,16 @@ const Home: FC<any> = ({route, navigation}) => {
   //   },
   // ];
 
+  // console.log('doc ref', firestore().collection('Courses').doc(courseId));
+
   useEffect(() => {
+    const courseRef = firestore().collection('Courses').doc(courseId);
     firestore()
       .collection('Messages')
-      .where('course', '==', firestore().collection('Courses').doc(courseId))
+      .where('course', '==', courseRef)
+      .orderBy('created_at', 'desc')
       .onSnapshot(docSnapshot => {
+        console.log('docSnapshot', docSnapshot?.docs);
         setMessages(
           docSnapshot?.docs.map(doc => {
             const {title, message, created_at} = doc.data();
@@ -67,6 +72,8 @@ const Home: FC<any> = ({route, navigation}) => {
       });
     // .catch(e => console.log('messages fetching:', e));
   }, [courseId]);
+
+  console.log('messages', messages);
 
   const iconsTypesToNames: any = useMemo(
     () => ({
@@ -93,7 +100,7 @@ const Home: FC<any> = ({route, navigation}) => {
     navigation.navigate('AddNewMessage');
   }, [navigation]);
 
-  console.log('change in styles', styles.courseDetailsView);
+  // console.log('change in styles', styles.courseDetailsView);
 
   return (
     <SafeAreaView style={styles.mainView}>
@@ -124,7 +131,7 @@ const Home: FC<any> = ({route, navigation}) => {
             data={messages}
             keyExtractor={item => item.id}
             renderItem={({item}) => { */}
-          {messages.map((item: any) => {
+          {messages?.map((item: any) => {
             const {type, message, title, id} = item;
             return (
               <Pressable

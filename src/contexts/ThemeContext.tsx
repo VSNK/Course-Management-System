@@ -20,7 +20,7 @@ type ColorType = {
 };
 
 const lightColors: ColorType = {
-  primary: '#673de6', //'#0d6efd',
+  primary: '#673de6',
   secondary: '#424C58',
   success: '#198754',
   info: '#0dcaf0',

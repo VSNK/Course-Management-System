@@ -112,6 +112,7 @@ const AddNewMessage: FC<any> = ({navigation}) => {
         size,
         type,
         message: docRef,
+        created_at: firestore.Timestamp.now(),
       });
       uploadedFileRefs.push(ref);
       uploadedFiles.push(uploadedFile);

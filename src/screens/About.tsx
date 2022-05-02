@@ -30,7 +30,7 @@ const About: FC<any> = ({}) => {
           .refFromURL(imgUrl)
           .getDownloadURL()
           .then(url => {
-            console.log('fetched url ', url);
+            // console.log('fetched url ', url);
             setImageUrl(url);
           })
           .catch(e => console.log('error while getting download url', e));

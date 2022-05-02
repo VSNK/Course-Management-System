@@ -10,8 +10,8 @@ import {useCourseContext} from '../contexts/CourseContext';
 
 const Card: FC<any> = ({item}) => {
   const {styles, colors} = useThemeContext({...cardStyles});
-  console.log('colors', colors);
-  console.log('styles', styles.headerView.backgroundColor);
+  // console.log('colors', colors);
+  // console.log('styles', styles.headerView.backgroundColor);
   const navigation = useNavigation();
   const {setCourseId} = useCourseContext();
   const {name, description, imgUrl} = item;

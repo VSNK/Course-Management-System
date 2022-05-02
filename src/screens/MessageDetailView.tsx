@@ -81,10 +81,10 @@ const MessageDetailView: FC<any> = ({navigation, route}) => {
         message: messageText,
         resources,
       } = docSnapshot?.data() ?? {};
-      console.log(
-        'data received',
-        docSnapshot.data()?.resources[0]._documentPath,
-      );
+      // console.log(
+      //   'data received',
+      //   docSnapshot.data()?.resources[0]._documentPath,
+      // );
       dispatch({
         type: 'SET_STATE',
         payload: {
@@ -133,8 +133,13 @@ const MessageDetailView: FC<any> = ({navigation, route}) => {
             Files Attached
           </Heading.Bold>
           {files.length > 0 ? (
-            files.map(({name, type = 'other', size}: any) => (
-              <ResourceListItemView name={name} type={type} size={size} />
+            files.map(({name, type = 'other', size, filename}: any) => (
+              <ResourceListItemView
+                name={name}
+                filename={filename}
+                type={type}
+                size={size}
+              />
             ))
           ) : (
             <FlexButton

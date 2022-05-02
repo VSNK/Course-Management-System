@@ -118,7 +118,7 @@ export const AuthProvider: FC<any> = ({children}) => {
         .get()
         .then(docSnapShot => {
           const {role} = docSnapShot.data() ?? {};
-          console.log('profile role', role);
+          // console.log('profile role', role);
           dispatch({type: 'SET_ROLE', payload: role});
         })
         .then(e => console.log('error while fetching profile details', e));
